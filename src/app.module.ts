@@ -5,10 +5,13 @@ import { TracksModule } from './tracks/tracks.module';
 import { FileModule } from './file/file.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import * as path from 'path';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-    ServeStaticModule.forRoot({ rootPath: path.resolve(__dirname, 'static') }),
+    ServeStaticModule.forRoot({
+      rootPath: path.resolve(__dirname, '../../second-music-player-files'),
+    }),
 
     SequelizeModule.forRoot({
       dialect: 'postgres',
@@ -16,13 +19,14 @@ import * as path from 'path';
       port: 5432,
       username: 'filippgoriainov',
       password: 'filippgoriainov',
-      database: 'template1',
+      database: 'filippgoriainov',
       models: [Track],
       autoLoadModels: true,
       synchronize: true,
     }),
     TracksModule,
     FileModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
