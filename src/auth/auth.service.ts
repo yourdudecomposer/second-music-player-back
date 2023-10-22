@@ -6,12 +6,12 @@ import { LoginUserDto } from './dto/login-user.dto';
 @Injectable()
 export class AuthService {
   constructor(private jwtService: JwtService) {}
-  //bcrypt.hash(userDto.password, 5).then((data) => console.log(22, data, 22));
+  // bcrypt.hash(userDto.password, 5).then((data) => console.log(22, data, 22));
 
   async login(userDto: LoginUserDto) {
     const passwordEquals = await bcrypt.compare(
       userDto.password,
-      '$2a$05$NdugZkmn1ZM0yBT0lrN1A.eL4ZqRUy.CPWGlI8zQu9PYu9iB4C7Fq',
+      '$2a$05$SzS75YhVKxGLuuGiPlpiI.tXppI9yAjXwANEzBkXG4zXaBA6IKmha',
     );
     if (passwordEquals) {
       return {

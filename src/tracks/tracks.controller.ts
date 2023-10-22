@@ -14,13 +14,17 @@ import {
 import { TracksService } from './tracks.service';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
-import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import {
+  FileFieldsInterceptor,
+  FileInterceptor,
+} from '@nestjs/platform-express';
 import { AuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('/tracks')
 export class TracksController {
   constructor(private readonly tracksService: TracksService) {}
 
+  @UseGuards(AuthGuard)
   @Post()
   @UseInterceptors(
     FileFieldsInterceptor([
@@ -29,6 +33,9 @@ export class TracksController {
     ]),
   )
   create(@UploadedFiles() files, @Body() trackDto: CreateTrackDto) {
+    console.log('==================================');
+    console.log(trackDto);
+    console.log('==================================');
     const { cover, audio } = files;
 
     return this.tracksService.createTrack(trackDto, cover[0], audio[0]);
@@ -50,7 +57,12 @@ export class TracksController {
 
   @UseGuards(AuthGuard)
   @Put(':id')
+  @UseInterceptors(FileInterceptor('file'))
   update(@Param('id') id: string, @Body() trackDto: UpdateTrackDto) {
+    console.log('==================================');
+    console.log(id, trackDto);
+    console.log('==================================');
+
     return this.tracksService.updateTrack(id, trackDto);
   }
 

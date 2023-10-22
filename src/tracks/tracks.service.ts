@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Track } from './track.model';
 import { CreateTrackDto } from './dto/create-track.dto';
@@ -14,11 +14,16 @@ export class TracksService {
   ) {}
 
   async createTrack(dto: CreateTrackDto, cover, audio): Promise<Track | any> {
-    if (!dto.title || !dto.description) return { status: 500 };
+    if (!dto.title)
+      throw new HttpException(
+        'need title and description',
+        HttpStatus.NO_CONTENT,
+      );
     const audioPath = this.fileService.createFile('audio', audio);
     const coverPath = this.fileService.createFile('cover', cover);
     return this.TrackModel.create({
       ...dto,
+      isActive: dto.isActive ? dto.isActive : false,
       audio: audioPath,
       cover: coverPath,
     });
@@ -48,6 +53,7 @@ export class TracksService {
 
   async updateTrack(id: string, dto: UpdateTrackDto): Promise<any> {
     const Track = await this.findOne(id);
+
     await Track.update(dto);
     return Track.dataValues;
   }

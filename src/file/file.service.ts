@@ -30,13 +30,16 @@ export class FileService {
 
   removeFile(file): any {
     try {
-      console.log(file);
-      const filePath = path.resolve(__dirname, '..', 'static', file);
-      console.log(filePath);
+      const filePath = path.resolve(
+        __dirname,
+        '../../..',
+        'second-music-player-files',
+        file,
+      );
 
       fs.unlink(filePath, (err) => {
         if (err) throw err;
-        console.log('path/file.txt was deleted');
+        console.log(filePath + ' was deleted');
       });
     } catch (e) {
       throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
